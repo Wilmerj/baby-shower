@@ -13,6 +13,7 @@ type Props = {
   regalo?: string;
 };
 
+const AUDIO = "/audio/cancion.m4a";
 const IMAGENES = ["goku", "fetal", "egg", "shen", "nimbus", "decoracion"];
 // En qué segundo de cada escena aparecen los adornos de los costados.
 const RETRASO_ADORNOS = [1.2, 0.4, 0.6, 0.4];
@@ -36,18 +37,40 @@ export function Invitacion({ invitado, regalo }: Props) {
   const audio = useRef<HTMLAudioElement>(null);
   // Reloj de la animación: sigue a la música; si el navegador no deja
   // reproducirla, avanza solo.
-  const reloj = useRef({ inicio: 0, conAudio: true });
+  const reloj = useRef({ inicio: 0, conAudio: true, desde: 0 });
 
   useEffect(() => {
     for (const nombre of IMAGENES) new Image().src = `/img/${nombre}.webp`;
+  }, []);
+
+  // Se descarga la canción completa y se reproduce desde memoria: así Safari
+  // (iPhone) no depende de que el servidor responda por rangos de bytes.
+  useEffect(() => {
+    let url = "";
+    fetch(AUDIO)
+      .then((r) => (r.ok ? r.blob() : Promise.reject()))
+      .then((blob) => {
+        const pista = audio.current;
+        url = URL.createObjectURL(blob);
+        if (pista && pista.paused && pista.currentTime === 0) pista.src = url;
+      })
+      .catch(() => {});
+    return () => {
+      if (url) URL.revokeObjectURL(url);
+    };
   }, []);
 
   useEffect(() => {
     if (!abierta) return;
     let cuadro = 0;
     const avanzar = () => {
-      const { inicio, conAudio } = reloj.current;
-      const t = conAudio && audio.current ? audio.current.currentTime : (performance.now() - inicio) / 1000;
+      const { inicio, conAudio, desde } = reloj.current;
+      const pista = audio.current;
+      // Si la música no arranca en 2 s, la animación sigue sin ella.
+      if (conAudio && pista && pista.currentTime <= desde && performance.now() - inicio > (desde + 2) * 1000) {
+        reloj.current.conAudio = false;
+      }
+      const t = reloj.current.conAudio && pista ? pista.currentTime : (performance.now() - inicio) / 1000;
       setEscena(escenaEn(t));
       if (t >= DURACION - 0.05 || audio.current?.ended) setTerminada(true);
       else cuadro = requestAnimationFrame(avanzar);
@@ -60,12 +83,12 @@ export function Invitacion({ invitado, regalo }: Props) {
   function reproducir() {
     // ?t=22 en la URL arranca desde ese segundo; sirve para revisar una escena.
     const desde = Number(new URLSearchParams(location.search).get("t")) || 0;
-    reloj.current = { inicio: performance.now() - desde * 1000, conAudio: true };
+    reloj.current = { inicio: performance.now() - desde * 1000, conAudio: true, desde };
     const pista = audio.current;
     if (pista) {
       pista.currentTime = desde;
       pista.play().catch(() => {
-        reloj.current = { inicio: performance.now() - desde * 1000, conAudio: false };
+        reloj.current.conAudio = false;
       });
     } else {
       reloj.current.conAudio = false;
@@ -86,7 +109,7 @@ export function Invitacion({ invitado, regalo }: Props) {
 
   return (
     <main className="fixed inset-0 overflow-hidden" style={LIENZO}>
-      <audio ref={audio} src="/audio/cancion.m4a" preload="auto" playsInline />
+      <audio ref={audio} src={AUDIO} preload="auto" playsInline />
 
       <div className={CUADRO}>
         <Destellos />

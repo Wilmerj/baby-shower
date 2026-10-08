@@ -2,6 +2,8 @@
 // invitado es el nombre y el regalo (props de <Invitacion />).
 export const BEBE = "Derek";
 export const PAPAS = "Wilmer y Nicol";
+// Se usa en la descripción de la vista previa al compartir el enlace.
+export const FECHA = "el domingo 28 de noviembre";
 
 // Momento (en segundos, igual que en el video) en que entra cada escena y en
 // que empieza a salir. Entre el `fin` de una y el `inicio` de la siguiente
