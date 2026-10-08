@@ -234,18 +234,26 @@ export function Liston({ className }: { className?: string }) {
 
 // Nube blanca esponjosa donde se sienta Goku en las escenas 1 y 2.
 export function NubeBlanca({ className }: { className?: string }) {
+  const id = useId();
   return (
-    <svg viewBox="0 0 300 100" className={className} aria-hidden>
-      <g fill="#ffffff" style={{ filter: "drop-shadow(0 3px 4px rgba(70,105,143,0.3))" }}>
-        <circle cx="52" cy="62" r="34" />
-        <circle cx="104" cy="44" r="40" />
-        <circle cx="164" cy="40" r="44" />
-        <circle cx="222" cy="52" r="36" />
-        <circle cx="262" cy="68" r="28" />
-        <rect x="20" y="60" width="268" height="38" rx="19" />
-      </g>
-      <g fill="#e8f1f9">
-        <ellipse cx="150" cy="88" rx="118" ry="9" />
+    <svg viewBox="0 0 300 116" className={className} aria-hidden>
+      <defs>
+        <linearGradient id={`${id}-g`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#ffffff" />
+          <stop offset="62%" stopColor="#ffffff" />
+          <stop offset="100%" stopColor="#dce8f4" />
+        </linearGradient>
+      </defs>
+      <g fill={`url(#${id}-g)`} style={{ filter: "drop-shadow(0 2px 3px rgba(70,105,143,0.35))" }}>
+        <circle cx="42" cy="70" r="30" />
+        <circle cx="88" cy="50" r="38" />
+        <circle cx="148" cy="40" r="44" />
+        <circle cx="208" cy="50" r="38" />
+        <circle cx="258" cy="70" r="30" />
+        <circle cx="72" cy="86" r="26" />
+        <circle cx="122" cy="88" r="27" />
+        <circle cx="178" cy="88" r="27" />
+        <circle cx="228" cy="86" r="26" />
       </g>
     </svg>
   );

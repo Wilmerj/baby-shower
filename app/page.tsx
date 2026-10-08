@@ -1,7 +1,11 @@
-import { Invitacion } from "@/components/Invitacion";
+import type { Metadata } from "next";
+import { ListaInvitados } from "@/components/ListaInvitados";
 
-// Versión genérica, sin nombre. Cada invitado tiene su propia página en
-// app/(invitados)/<slug>/page.tsx.
+// Página privada (ver proxy.ts): enlaces a la invitación de cada invitado.
+export const metadata: Metadata = {
+  title: "Invitados",
+};
+
 export default function Home() {
-  return <Invitacion />;
+  return <ListaInvitados />;
 }

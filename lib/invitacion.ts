@@ -1,7 +1,7 @@
 // Textos fijos de la invitación, copiados del video. Lo único que cambia por
 // invitado es el nombre y el regalo (props de <Invitacion />).
-export const BEBE = "Liam Sthebano";
-export const PAPAS = "Manuel & Dani";
+export const BEBE = "Derek";
+export const PAPAS = "Wilmer y Nicol";
 
 // Momento (en segundos, igual que en el video) en que entra cada escena y en
 // que empieza a salir. Entre el `fin` de una y el `inicio` de la siguiente
@@ -18,4 +18,9 @@ export const DURACION = 45;
 
 export function escenaEn(t: number) {
   return ESCENAS.findIndex((e) => t >= e.inicio && t < e.fin);
+}
+
+// "Tía Eva y esposo", "Julian, esposa y 2 hijas"… son invitaciones para varios.
+export function esPlural(invitado: string) {
+  return /,|\s[ye]\s/i.test(invitado);
 }
