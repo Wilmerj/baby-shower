@@ -99,3 +99,18 @@ body {
 .latir {
   animation: latir var(--duracion, 3s) ease-in-out infinite;
 }
+
+/* Onda dorada que sale de un botón que pide atención ("Activar sonido"). */
+@keyframes llamar {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--dorado) 80%, transparent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 12px color-mix(in srgb, var(--dorado) 0%, transparent);
+  }
+}
+
+.llamar {
+  animation: llamar 1.6s ease-out infinite;
+}
