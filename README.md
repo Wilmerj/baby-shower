@@ -7,9 +7,11 @@ sincronizadas con la canción del video.
 npm run dev
 ```
 
-- Un invitado = una carpeta: `app/(invitados)/<slug>/page.tsx` → URL `/<slug>`.
-  Para uno nuevo copia cualquiera de esas carpetas (solo cambian `invitado` y `regalo`)
-  y agrégalo a `lib/invitados.ts`.
+- Invitados: todo se edita en `lib/invitados.ts` (nombre, enlace y regalo). Una sola
+  ruta, `app/[enlace]/page.tsx`, atiende `/<enlace>` buscándolo en esa lista; los de la
+  lista se generan al compilar. Un enlace que no está muestra la invitación sin nombre,
+  sin regalo y sin botón de confirmar. Después de editar la lista hay que volver a
+  publicar (`yarn deploy`).
 - La raíz (`/`) es la lista privada de invitados con su enlace. Primero muestra una
   pantalla que pide la contraseña (definida en `lib/acceso.ts`); el servidor la
   valida y guarda una cookie de acceso por 30 días. Sin esa cookie la lista no se

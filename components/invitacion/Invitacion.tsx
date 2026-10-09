@@ -297,7 +297,7 @@ export function Invitacion({ enlace, invitado, regalo }: Props) {
               className="absolute inset-0"
               exit={{ opacity: 0, transition: { duration: 0.7 } }}
             >
-              <EscenaActual regalo={regalo} confirmacion={confirmacion} confirmar={confirmar} />
+              <EscenaActual regalo={regalo} confirmacion={confirmacion} confirmar={enlace ? confirmar : undefined} />
             </motion.div>
           )}
         </AnimatePresence>

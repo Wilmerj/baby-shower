@@ -564,39 +564,43 @@ export function Escena5({ regalo, confirmacion = "pendiente", confirmar }: Props
             </Aparece>
           )}
 
-          {/* Lo más importante de la escena: queda encima de todo y late. */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.5, y: "40%" }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{
-              delay: regalo ? 2.6 : 2,
-              opacity: { delay: regalo ? 2.6 : 2, duration: 0.25 },
-              type: "spring",
-              stiffness: 220,
-              damping: 13,
-            }}
-          >
-            {/* Ya confirmada deja de latir y cambia a dorado: no hay nada más que hacer. */}
-            <button
-              type="button"
-              onClick={confirmar}
-              disabled={confirmada || confirmacion === "enviando"}
-              aria-live="polite"
-              className={`flex items-center justify-center gap-[2.2cqw] rounded-full border-[0.7cqw] font-mano leading-none shadow-[0_2cqw_5cqw_rgba(37,60,92,0.45)] transition-colors ${
-                confirmada
-                  ? "border-white bg-dorado text-white"
-                  : "latir llamar border-dorado bg-azul-noche text-white"
-              } ${regalo ? "px-[5cqw] py-[2.8cqw] text-[6.6cqw]" : "px-[5.5cqw] py-[3.4cqw] text-[7.4cqw]"}`}
-              style={{ "--latir": 1.05, "--duracion": "1.8s" } as CSSProperties}
+          {/* Lo más importante de la escena: queda encima de todo y late. Sin
+              invitado (enlace que no está en la lista) no hay a quién registrar
+              la confirmación, así que no se muestra. */}
+          {confirmar && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5, y: "40%" }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{
+                delay: regalo ? 2.6 : 2,
+                opacity: { delay: regalo ? 2.6 : 2, duration: 0.25 },
+                type: "spring",
+                stiffness: 220,
+                damping: 13,
+              }}
             >
-              {confirmacion !== "error" && (
-                <svg viewBox="0 0 24 24" className="size-[1em] shrink-0" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                  <path d="M5 12.5l4.5 4.5L19 7.5" />
-                </svg>
-              )}
-              {TEXTO_CONFIRMACION[confirmacion]}
-            </button>
-          </motion.div>
+              {/* Ya confirmada deja de latir y cambia a dorado: no hay nada más que hacer. */}
+              <button
+                type="button"
+                onClick={confirmar}
+                disabled={confirmada || confirmacion === "enviando"}
+                aria-live="polite"
+                className={`flex items-center justify-center gap-[2.2cqw] rounded-full border-[0.7cqw] font-mano leading-none shadow-[0_2cqw_5cqw_rgba(37,60,92,0.45)] transition-colors ${
+                  confirmada
+                    ? "border-white bg-dorado text-white"
+                    : "latir llamar border-dorado bg-azul-noche text-white"
+                } ${regalo ? "px-[5cqw] py-[2.8cqw] text-[6.6cqw]" : "px-[5.5cqw] py-[3.4cqw] text-[7.4cqw]"}`}
+                style={{ "--latir": 1.05, "--duracion": "1.8s" } as CSSProperties}
+              >
+                {confirmacion !== "error" && (
+                  <svg viewBox="0 0 24 24" className="size-[1em] shrink-0" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <path d="M5 12.5l4.5 4.5L19 7.5" />
+                  </svg>
+                )}
+                {TEXTO_CONFIRMACION[confirmacion]}
+              </button>
+            </motion.div>
+          )}
         </div>
       </Pos>
     </>
