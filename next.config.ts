@@ -1,3 +1,4 @@
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -12,3 +13,7 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
+
+// Con `next dev`, da acceso a los bindings de wrangler.jsonc (el KV de
+// confirmaciones) simulados en local.
+initOpenNextCloudflareForDev();

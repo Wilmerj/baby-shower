@@ -7,5 +7,5 @@ const invitado = "Yohana y esposo";
 export const metadata = metadataInvitado(invitado);
 
 export default function Page() {
-  return <Invitacion invitado={invitado} regalo={regaloDe("yohana")} />;
+  return <Invitacion enlace="yohana" invitado={invitado} regalo={regaloDe("yohana")} />;
 }

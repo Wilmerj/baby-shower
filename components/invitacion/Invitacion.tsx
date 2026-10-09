@@ -1,12 +1,24 @@
 "use client";
 
-import { AnimatePresence, animate, motion, useMotionValue, useTransform, type MotionValue } from "motion/react";
+import {
+  AnimatePresence,
+  animate,
+  motion,
+  useMotionValue,
+  useTransform,
+  visualElementStore,
+  type AnimationPlaybackControls,
+  type MotionValue,
+} from "motion/react";
 import { useEffect, useEffectEvent, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 import { DURACION, escenaEn, esPlural } from "@/lib/invitacion";
 import { BandaNubes, Destellos, Esfera, Sprite } from "./dibujos";
-import { ESCENAS_COMPONENTES } from "./escenas";
+import { ESCENAS_COMPONENTES, type EstadoConfirmacion } from "./escenas";
+import { confirmarAsistencia, consultarConfirmacion } from "@/app/confirmar";
 
 type Props = {
+  /** Enlace (carpeta) del invitado; con él se guarda su confirmación. */
+  enlace?: string;
   /** Nombre del invitado; sale en la portada antes de abrir la invitación. */
   invitado?: string;
   /** Regalo sugerido; sale al final, debajo de "¡No olvides mi regalito!". */
@@ -39,7 +51,7 @@ const LIENZO: CSSProperties & Record<string, string> = {
 const CUADRO =
   "absolute left-1/2 top-1/2 aspect-[9/16] w-[var(--ancho)] -translate-x-1/2 -translate-y-1/2 [container-type:inline-size]";
 
-export function Invitacion({ invitado, regalo }: Props) {
+export function Invitacion({ enlace, invitado, regalo }: Props) {
   const [abierta, setAbierta] = useState(false);
   const [escena, setEscena] = useState(-1);
   const [terminada, setTerminada] = useState(false);
@@ -54,6 +66,30 @@ export function Invitacion({ invitado, regalo }: Props) {
   // Numera los intentos de sonar la música: la respuesta tardía de un play()
   // viejo no debe pisar a uno más nuevo.
   const intento = useRef(0);
+  // Pausa: cuándo empezó y qué animaciones se detuvieron, para reanudar solo
+  // esas (reanudar una animación ya terminada la repetiría).
+  const pausa = useRef<{ desde: number; detenidas: { play(): void }[] } | null>(null);
+  const [pausada, setPausada] = useState(false);
+  const raiz = useRef<HTMLElement>(null);
+  const [confirmacion, setConfirmacion] = useState<EstadoConfirmacion>("pendiente");
+
+  // Si ya confirmó antes (desde este u otro celular), el botón lo muestra.
+  useEffect(() => {
+    if (!enlace) return;
+    consultarConfirmacion(enlace)
+      .then((confirmado) => confirmado && setConfirmacion("confirmada"))
+      .catch(() => {});
+  }, [enlace]);
+
+  async function confirmar() {
+    if (!enlace || confirmacion === "enviando" || confirmacion === "confirmada") return;
+    setConfirmacion("enviando");
+    try {
+      setConfirmacion((await confirmarAsistencia(enlace)) ? "confirmada" : "error");
+    } catch {
+      setConfirmacion("error");
+    }
+  }
   // Cuenta regresiva de la portada, de 0 a 1.
   const espera = useMotionValue(0);
 
@@ -110,6 +146,10 @@ export function Invitacion({ invitado, regalo }: Props) {
     if (!abierta) return;
     let cuadro = 0;
     const avanzar = () => {
+      if (pausa.current) {
+        cuadro = requestAnimationFrame(avanzar);
+        return;
+      }
       const { inicio, conAudio, desde } = reloj.current;
       const pista = audio.current;
       // Si la música no arranca en 2 s, la animación sigue sin ella. Se pausa
@@ -171,16 +211,62 @@ export function Invitacion({ invitado, regalo }: Props) {
 
   const pedirSonido = sinMusica && !terminada;
 
-  // Sin música, tocar cualquier parte de la pantalla (que no sea un botón)
-  // también la enciende.
+  // Congela la invitación como un video en pausa: la música, las animaciones
+  // de Motion (cada una vive en su valor animado) y las de CSS en bucle.
+  function pausar() {
+    const detenidas: { play(): void }[] = [];
+    raiz.current?.querySelectorAll("*").forEach((elemento) => {
+      visualElementStore.get(elemento)?.values.forEach((valor) => {
+        // El tipo público solo expone parte de la animación; en tiempo de
+        // ejecución es el control completo, con pause() y play().
+        const animacion = valor.animation as AnimationPlaybackControls | undefined;
+        if (animacion?.state === "running") {
+          animacion.pause();
+          detenidas.push(animacion);
+        }
+      });
+    });
+    for (const animacion of document.getAnimations()) {
+      if (animacion instanceof CSSAnimation && animacion.playState === "running") {
+        animacion.pause();
+        detenidas.push(animacion);
+      }
+    }
+    audio.current?.pause();
+    pausa.current = { desde: performance.now(), detenidas };
+    setPausada(true);
+  }
+
+  // Se llama dentro del toque, así que la música puede volver a sonar.
+  function continuar() {
+    const actual = pausa.current;
+    if (!actual) return;
+    pausa.current = null;
+    reloj.current.inicio += performance.now() - actual.desde;
+    for (const animacion of actual.detenidas) animacion.play();
+    setPausada(false);
+    if (sinMusica) return encenderMusica();
+    if (reloj.current.conAudio) {
+      audio.current?.play().catch(() => {
+        reloj.current.conAudio = false;
+        setSinMusica(true);
+      });
+    }
+  }
+
+  // Tocar la pantalla mientras corre la invitación la pausa o la reanuda. Si
+  // arrancó sin música, el primer toque la enciende.
   function alTocarPantalla(e: MouseEvent) {
-    if (pedirSonido && !(e.target as Element).closest("button")) encenderMusica();
+    if (!abierta || terminada || (e.target as Element).closest("button, a")) return;
+    if (pausa.current) continuar();
+    else if (pedirSonido) encenderMusica();
+    else pausar();
   }
 
   const EscenaActual = escena >= 0 ? ESCENAS_COMPONENTES[escena] : null;
 
   return (
-    <main className="fixed inset-0 overflow-hidden" style={LIENZO} onClick={alTocarPantalla}>
+    <main ref={raiz} className="fixed inset-0 overflow-hidden" style={LIENZO} onClick={alTocarPantalla}>
       <audio ref={audio} src={AUDIO} preload="auto" playsInline />
 
       <div className={CUADRO}>
@@ -211,7 +297,7 @@ export function Invitacion({ invitado, regalo }: Props) {
               className="absolute inset-0"
               exit={{ opacity: 0, transition: { duration: 0.7 } }}
             >
-              <EscenaActual regalo={regalo} />
+              <EscenaActual regalo={regalo} confirmacion={confirmacion} confirmar={confirmar} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -219,6 +305,23 @@ export function Invitacion({ invitado, regalo }: Props) {
 
       {abierta && (
         <div className="absolute top-[max(env(safe-area-inset-top),12px)] right-3 flex gap-2">
+          {/* En pausa no se tapa nada de la escena (se pausa para leer): solo
+              este aviso en la esquina. Tocar cualquier parte también reanuda. */}
+          <AnimatePresence>
+            {pausada && (
+              <motion.button
+                type="button"
+                onClick={continuar}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="flex h-10 items-center gap-1.5 rounded-full bg-white/85 px-3.5 font-mano text-base text-azul-noche shadow-md backdrop-blur"
+              >
+                <IconoPlay />
+                Continuar
+              </motion.button>
+            )}
+          </AnimatePresence>
           <AnimatePresence>
             {terminada && (
               <motion.button
@@ -364,6 +467,14 @@ function tamanoNombre(invitado: string) {
   if (invitado.length <= 12) return 14;
   if (invitado.length <= 22) return 11.5;
   return 9.5;
+}
+
+function IconoPlay() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-4" fill="currentColor" aria-hidden>
+      <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />
+    </svg>
+  );
 }
 
 function IconoSonido() {

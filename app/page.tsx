@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Entrar } from "@/components/Entrar";
 import { ListaInvitados } from "@/components/ListaInvitados";
 import { tieneAcceso } from "@/lib/acceso";
+import { todasLasConfirmaciones } from "@/lib/confirmaciones";
 import { GRUPOS_INVITADOS } from "@/lib/invitados";
 
 // Página privada: enlaces a la invitación de cada invitado. Sin la cookie de
@@ -13,5 +14,5 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   if (!(await tieneAcceso())) return <Entrar />;
-  return <ListaInvitados grupos={GRUPOS_INVITADOS} />;
+  return <ListaInvitados grupos={GRUPOS_INVITADOS} confirmados={await todasLasConfirmaciones()} />;
 }

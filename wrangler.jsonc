@@ -8,5 +8,8 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  // Confirmaciones de asistencia (clave: enlace del invitado). Sin "id",
+  // wrangler crea el namespace la primera vez que se despliega.
+  "kv_namespaces": [{ "binding": "CONFIRMACIONES" }],
   "observability": { "enabled": true }
 }

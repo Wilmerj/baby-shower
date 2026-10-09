@@ -465,9 +465,25 @@ export function Escena4() {
 const ANGULOS = [-119, -47, 25, 97, 169];
 const ESTRELLAS_ANILLO = [4, 5, 6, 2, 7];
 
-export function Escena5({ regalo }: { regalo?: string }) {
+export type EstadoConfirmacion = "pendiente" | "enviando" | "confirmada" | "error";
+
+type PropsEscena = {
+  regalo?: string;
+  confirmacion?: EstadoConfirmacion;
+  confirmar?: () => void;
+};
+
+const TEXTO_CONFIRMACION: Record<EstadoConfirmacion, string> = {
+  pendiente: "Confirmar asistencia",
+  enviando: "Confirmando…",
+  confirmada: "¡Asistencia confirmada!",
+  error: "No se pudo, toca otra vez",
+};
+
+export function Escena5({ regalo, confirmacion = "pendiente", confirmar }: PropsEscena) {
+  const confirmada = confirmacion === "confirmada";
   // Con regalo se sube todo un poco para que quepa debajo, sin tocar las nubes.
-  const dy = regalo ? -6 : 0;
+  const dy = regalo ? -8 : 0;
   const centroY = 40.1 + dy;
   return (
     <>
@@ -528,29 +544,66 @@ export function Escena5({ regalo }: { regalo?: string }) {
         </Trazo>
       </Pos>
 
-      <Pos x={50} y={80.2 + dy} w={100}>
-        <Escribir
-          lineas={["¡No olvides mi regalito!"]}
-          inicio={1}
-          paso={0.035}
-          className={`${MANO} text-[6cqw] text-azul-noche`}
-        />
-      </Pos>
+      {/* "¡No olvides mi regalito!", el regalo y "Confirmar asistencia" van en
+          una sola columna anclada por arriba: si el regalo ocupa más líneas,
+          el botón baja en vez de taparlo. */}
+      <Pos x={50} y={regalo ? 67.5 : 78} w={100} style={{ translate: "-50% 0" }} className="z-10">
+        <div className={`flex flex-col items-center ${regalo ? "gap-[2.2cqw]" : "gap-[3.5cqw]"}`}>
+          <Escribir
+            lineas={["¡No olvides mi regalito!"]}
+            inicio={1}
+            paso={0.035}
+            className={`${MANO} text-[6cqw] leading-tight text-azul-noche`}
+          />
 
-      {regalo && (
-        <Pos x={50} y={81.5} w={84}>
-          <Aparece retraso={2} duracion={0.7} desde={{ scale: 0.85 }}>
-            <p className="rounded-[4cqw] border-[0.4cqw] border-dorado bg-white/75 px-[4cqw] py-[1.6cqw] text-center font-mano text-[5.4cqw] leading-[1.25] text-cafe shadow-[0_1cqw_3cqw_rgba(70,105,143,0.25)]">
-              {regalo}
-            </p>
-          </Aparece>
-        </Pos>
-      )}
+          {regalo && (
+            <Aparece retraso={2} duracion={0.7} desde={{ scale: 0.85 }}>
+              <p className="w-[84cqw] rounded-[4cqw] border-[0.4cqw] border-dorado bg-white/75 px-[4cqw] py-[1.4cqw] text-center font-mano text-[5cqw] leading-[1.22] text-cafe shadow-[0_1cqw_3cqw_rgba(70,105,143,0.25)]">
+                {regalo}
+              </p>
+            </Aparece>
+          )}
+
+          {/* Lo más importante de la escena: queda encima de todo y late. */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5, y: "40%" }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{
+              delay: regalo ? 2.6 : 2,
+              opacity: { delay: regalo ? 2.6 : 2, duration: 0.25 },
+              type: "spring",
+              stiffness: 220,
+              damping: 13,
+            }}
+          >
+            {/* Ya confirmada deja de latir y cambia a dorado: no hay nada más que hacer. */}
+            <button
+              type="button"
+              onClick={confirmar}
+              disabled={confirmada || confirmacion === "enviando"}
+              aria-live="polite"
+              className={`flex items-center justify-center gap-[2.2cqw] rounded-full border-[0.7cqw] font-mano leading-none shadow-[0_2cqw_5cqw_rgba(37,60,92,0.45)] transition-colors ${
+                confirmada
+                  ? "border-white bg-dorado text-white"
+                  : "latir llamar border-dorado bg-azul-noche text-white"
+              } ${regalo ? "px-[5cqw] py-[2.8cqw] text-[6.6cqw]" : "px-[5.5cqw] py-[3.4cqw] text-[7.4cqw]"}`}
+              style={{ "--latir": 1.05, "--duracion": "1.8s" } as CSSProperties}
+            >
+              {confirmacion !== "error" && (
+                <svg viewBox="0 0 24 24" className="size-[1em] shrink-0" fill="none" stroke="currentColor" strokeWidth={2.6} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M5 12.5l4.5 4.5L19 7.5" />
+                </svg>
+              )}
+              {TEXTO_CONFIRMACION[confirmacion]}
+            </button>
+          </motion.div>
+        </div>
+      </Pos>
     </>
   );
 }
 
-export const ESCENAS_COMPONENTES: ComponentType<{ regalo?: string }>[] = [
+export const ESCENAS_COMPONENTES: ComponentType<PropsEscena>[] = [
   Escena1,
   Escena2,
   Escena3,
