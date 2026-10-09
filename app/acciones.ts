@@ -1,7 +1,9 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-import { CLAVE, COOKIE_ACCESO, DURACION_ACCESO, tokenAcceso } from "@/lib/acceso";
+import { CLAVE, COOKIE_ACCESO, DURACION_ACCESO, tieneAcceso, tokenAcceso } from "@/lib/acceso";
+import { borrarConfirmacion } from "@/lib/confirmaciones";
 
 type EstadoEntrar = { error: boolean };
 
@@ -14,6 +16,15 @@ export async function entrar(_estado: EstadoEntrar, datos: FormData): Promise<Es
 
   (await cookies()).set(COOKIE_ACCESO, await tokenAcceso(), { ...opciones, maxAge: DURACION_ACCESO });
   return { error: false };
+}
+
+// Desde la lista privada: solo con la cookie de acceso. Después se vuelve a
+// renderizar `/` para que la lista traiga las confirmaciones actualizadas.
+export async function quitarConfirmacion(enlace: string): Promise<boolean> {
+  if (!(await tieneAcceso())) return false;
+  await borrarConfirmacion(enlace);
+  revalidatePath("/");
+  return true;
 }
 
 export async function salir() {

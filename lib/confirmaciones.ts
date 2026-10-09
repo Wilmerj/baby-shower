@@ -14,6 +14,10 @@ export async function guardarConfirmacion(enlace: string) {
   await (await kv()).put(enlace, fecha, { metadata: { fecha } });
 }
 
+export async function borrarConfirmacion(enlace: string) {
+  await (await kv()).delete(enlace);
+}
+
 export async function estaConfirmado(enlace: string) {
   return (await (await kv()).get(enlace)) !== null;
 }

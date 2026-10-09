@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { salir } from "@/app/acciones";
+import { quitarConfirmacion, salir } from "@/app/acciones";
 import type { GRUPOS_INVITADOS } from "@/lib/invitados";
 
 type Vista = "todos" | "confirmados" | "pendientes";
@@ -36,6 +36,25 @@ export function ListaInvitados({
   const [filtro, setFiltro] = useState("");
   const [vista, setVista] = useState<Vista>("todos");
   const [copiado, setCopiado] = useState<string | null>(null);
+  // Confirmaciones quitadas en esta visita: se ocultan de inmediato aunque la
+  // lista del KV tarde unos segundos en reflejar el borrado.
+  const [quitados, setQuitados] = useState<Set<string>>(() => new Set());
+  const [quitando, setQuitando] = useState<string | null>(null);
+
+  const confirmo = (enlace: string) => enlace in confirmados && !quitados.has(enlace);
+
+  async function quitar(enlace: string, nombre: string) {
+    if (!window.confirm(`¿Quitar la confirmación de ${nombre}?`)) return;
+    setQuitando(enlace);
+    try {
+      if (await quitarConfirmacion(enlace)) setQuitados((antes) => new Set(antes).add(enlace));
+      else window.alert("No se pudo quitar. Vuelve a entrar con la contraseña.");
+    } catch {
+      window.alert("No se pudo quitar. Intenta de nuevo.");
+    } finally {
+      setQuitando(null);
+    }
+  }
 
   const buscar = sinTildes(filtro.trim());
   const grupos = todos.map((g) => ({
@@ -43,12 +62,12 @@ export function ListaInvitados({
     invitados: g.invitados.filter(
       (i) =>
         sinTildes(i.nombre).includes(buscar) &&
-        (vista === "todos" || (vista === "confirmados") === i.enlace in confirmados),
+        (vista === "todos" || (vista === "confirmados") === confirmo(i.enlace)),
     ),
   })).filter((g) => g.invitados.length > 0);
   const total = todos.reduce((n, g) => n + g.invitados.length, 0);
   const totalConfirmados = todos.reduce(
-    (n, g) => n + g.invitados.filter((i) => i.enlace in confirmados).length,
+    (n, g) => n + g.invitados.filter((i) => confirmo(i.enlace)).length,
     0,
   );
 
@@ -106,19 +125,31 @@ export function ListaInvitados({
             <ul className="mt-2 divide-y divide-azul-noche/10 overflow-hidden rounded-2xl bg-white/80 shadow-sm">
               {g.invitados.map((i) => (
                 <li key={i.enlace} className="flex items-center gap-3 px-4 py-3">
-                  <a href={`/${i.enlace}`} target="_blank" rel="noopener noreferrer" className="min-w-0 flex-1">
-                    <span className="block text-lg leading-tight">{i.nombre}</span>
-                    <span className="block truncate text-sm text-cafe">/{i.enlace}</span>
-                    {i.regalo && (
-                      <span className="block text-sm leading-snug text-cafe">🎁 {i.regalo}</span>
+                  <div className="min-w-0 flex-1">
+                    <a href={`/${i.enlace}`} target="_blank" rel="noopener noreferrer" className="block">
+                      <span className="block text-lg leading-tight">{i.nombre}</span>
+                      <span className="block truncate text-sm text-cafe">/{i.enlace}</span>
+                      {i.regalo && (
+                        <span className="block text-sm leading-snug text-cafe">🎁 {i.regalo}</span>
+                      )}
+                    </a>
+                    {confirmo(i.enlace) && (
+                      <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-dorado/20 px-2 py-0.5 text-sm text-azul-noche">
+                          ✓ Confirmó
+                          {confirmados[i.enlace] && ` · ${formatoFecha.format(new Date(confirmados[i.enlace]))}`}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => quitar(i.enlace, i.nombre)}
+                          disabled={quitando === i.enlace}
+                          className="text-sm text-cafe underline underline-offset-2 hover:text-azul-noche disabled:opacity-60"
+                        >
+                          {quitando === i.enlace ? "Quitando…" : "Quitar"}
+                        </button>
+                      </div>
                     )}
-                    {i.enlace in confirmados && (
-                      <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-dorado/20 px-2 py-0.5 text-sm text-azul-noche">
-                        ✓ Confirmó
-                        {confirmados[i.enlace] && ` · ${formatoFecha.format(new Date(confirmados[i.enlace]))}`}
-                      </span>
-                    )}
-                  </a>
+                  </div>
                   <button
                     type="button"
                     onClick={() => copiar(i.enlace)}
