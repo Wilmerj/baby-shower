@@ -69,7 +69,7 @@ export const GRUPOS_INVITADOS: { grupo: string; invitados: { nombre: string; enl
   {
     grupo: "Lista 4",
     invitados: [
-      { nombre: "Mamá", enlace: "mama", regalo: "" },
+      { nombre: "Emir Gaitan", enlace: "mama", regalo: "Tina de Baño" },
       { nombre: "Papá", enlace: "papa", regalo: "" },
       { nombre: "Caro y Michael", enlace: "caro-y-michael", regalo: "" },
       { nombre: "Marisol y Helen", enlace: "marisol-y-helen", regalo: "" },
