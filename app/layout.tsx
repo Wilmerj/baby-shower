@@ -24,7 +24,7 @@ const tinos = Tinos({
 export const metadata: Metadata = {
   // URL pública del sitio: WhatsApp necesita la URL absoluta de la imagen de
   // vista previa. SITIO_URL permite cambiarla (p. ej. con un dominio propio).
-  metadataBase: new URL(process.env.SITIO_URL ?? "https://baby-shower.wilmerj1996.workers.dev"),
+  metadataBase: new URL(process.env.SITIO_URL ?? "https://invitacion-baby-shower.com"),
   title: `Baby Shower de ${BEBE}`,
   description: "Tienes una invitación especial",
   // Las invitaciones son personales: que no aparezcan en buscadores.
