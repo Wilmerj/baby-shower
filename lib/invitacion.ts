@@ -3,7 +3,9 @@
 export const BEBE = "Derek";
 export const PAPAS = "Wilmer y Nicol";
 // Se usa en la descripción de la vista previa al compartir el enlace.
-export const FECHA = "el domingo 28 de noviembre";
+export const FECHA = "el domingo 29 de noviembre";
+// Enlace de Google Maps al lugar del evento.
+export const MAPA_URL = "https://maps.app.goo.gl/noYS4y9jmPTs3XMt6";
 
 // Momento (en segundos, igual que en el video) en que entra cada escena y en
 // que empieza a salir. Entre el `fin` de una y el `inicio` de la siguiente

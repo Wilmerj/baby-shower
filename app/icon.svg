@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <radialGradient id="g" cx="38%" cy="32%" r="70%">
+      <stop offset="0%" stop-color="#fff3c2"/>
+      <stop offset="22%" stop-color="#ffc24a"/>
+      <stop offset="58%" stop-color="#f7921c"/>
+      <stop offset="88%" stop-color="#dc650c"/>
+      <stop offset="100%" stop-color="#bf530a"/>
+    </radialGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#g)" stroke="#c4600f" stroke-width="2"/>
+  <g fill="#d6261c" stroke="#9e1a12" stroke-width="1">
+    <path transform="translate(35 38) scale(1.2)" d="M0,-9 L2.6,-3.2 L8.6,-2.8 L4,1.2 L5.4,7.3 L0,4 L-5.4,7.3 L-4,1.2 L-8.6,-2.8 L-2.6,-3.2Z"/>
+    <path transform="translate(65 38) scale(1.2)" d="M0,-9 L2.6,-3.2 L8.6,-2.8 L4,1.2 L5.4,7.3 L0,4 L-5.4,7.3 L-4,1.2 L-8.6,-2.8 L-2.6,-3.2Z"/>
+    <path transform="translate(35 64) scale(1.2)" d="M0,-9 L2.6,-3.2 L8.6,-2.8 L4,1.2 L5.4,7.3 L0,4 L-5.4,7.3 L-4,1.2 L-8.6,-2.8 L-2.6,-3.2Z"/>
+    <path transform="translate(65 64) scale(1.2)" d="M0,-9 L2.6,-3.2 L8.6,-2.8 L4,1.2 L5.4,7.3 L0,4 L-5.4,7.3 L-4,1.2 L-8.6,-2.8 L-2.6,-3.2Z"/>
+  </g>
+</svg>

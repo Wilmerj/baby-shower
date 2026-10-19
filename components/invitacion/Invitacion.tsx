@@ -26,7 +26,7 @@ type Props = {
 };
 
 const AUDIO = "/audio/cancion.m4a";
-const IMAGENES = ["goku", "fetal", "egg", "shen", "nimbus", "decoracion"];
+const IMAGENES = ["goku", "fetal", "ecografia", "shen", "nimbus", "decoracion"];
 // En qué segundo de cada escena aparecen los adornos de los costados.
 const RETRASO_ADORNOS = [1.2, 0.4, 0.6, 0.4];
 

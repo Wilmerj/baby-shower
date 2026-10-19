@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import type { ComponentType, CSSProperties, ReactNode } from "react";
-import { BEBE, PAPAS } from "@/lib/invitacion";
+import { BEBE, MAPA_URL, PAPAS } from "@/lib/invitacion";
 import { Corazon, Esfera, EstrellaAzul, Liston, NubeBlanca, Sprite } from "./dibujos";
 import { Escribir, Trazo } from "./texto";
 
@@ -207,7 +207,9 @@ export function Escena1() {
           <Liston className="block" />
         </motion.div>
       </Pos>
-      <Pos x={50} y={57.3}>
+      {/* Centro de la banda: ~y=59.4 de 140 en el viewBox (no 70) -> 59.6 + (59.4-70)/140*14.5 = 58.5;
+          +0.2 porque el cuerpo de la cursiva queda algo bajo el centro de su caja (padding simétrico). */}
+      <Pos x={50} y={58.7}>
         <Trazo inicio={3.1} duracion={0.9} className={`${SCRIPT} text-[8.6cqw]`}>
           {BEBE}
         </Trazo>
@@ -249,24 +251,12 @@ export function Escena2() {
         />
       </Pos>
 
-      <Pos x={50} y={52.6}>
-        <motion.div
-          initial={{ x: "-110%", opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ delay: 0.9, duration: 1, ease: SALE_SUAVE }}
-        >
-          <Trazo inicio={0} duracion={0.01} borrar className={`${SCRIPT} text-[15cqw]`}>
-            {BEBE}
-          </Trazo>
-        </motion.div>
-      </Pos>
-
-      <Pos x={30} y={94.5} w={72}>
+      <Pos x={50} y={94.5} w={72}>
         <Aparece retraso={0.5} desde={{ y: "30%" }}>
           <NubeBlanca className="block" />
         </Aparece>
       </Pos>
-      <Pos x={31.9} y={76.9} w={63.4}>
+      <Pos x={50} y={74.4} w={71}>
         <Aparece retraso={0.5} duracion={1} desde={{ y: "8%" }}>
           <Flota duracion={3.8} distancia="-0.8cqw">
             <Sprite src="/img/goku.webp" alt="Goku bebé tomando tetero" />
@@ -316,7 +306,9 @@ export function Escena3() {
         </Trazo>
       </Pos>
 
-      <Pos x={50} y={80.9} w={48.6}>
+      {/* Ecografía en círculo, centrada. El fondo del círculo es negro igual
+          que el de la imagen, así no se nota dónde termina la foto. */}
+      <Pos x={50} y={77} w={50}>
         <motion.div
           initial={{ opacity: 0, scale: 0.86 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -324,8 +316,15 @@ export function Escena3() {
             opacity: { delay: 0.8, duration: 1 },
             scale: { delay: 0.8, duration: 8, ease: "linear" },
           }}
+          className="relative aspect-square w-full overflow-hidden rounded-full border-[0.7cqw] border-dorado bg-black shadow-[0_1.5cqw_4cqw_rgba(0,0,0,0.35)]"
         >
-          <Sprite src="/img/egg.webp" alt="Goku bebé dormido en un capullo de luz" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/img/ecografia.webp"
+            alt="Ecografía de Derek"
+            draggable={false}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
         </motion.div>
       </Pos>
     </>
@@ -420,10 +419,10 @@ export function Escena4() {
           <Escribir lineas={["DOMINGO"]} inicio={1.2} paso={0.04} className="font-mano text-[5.4cqw] text-azul-noche" />
         </Pos>
         <Pos x={51.2} y={46}>
-          <Escribir lineas={["28"]} inicio={1.3} paso={0.08} className="font-mano text-[12.5cqw] leading-none text-azul-noche" />
+          <Escribir lineas={["29"]} inicio={1.3} paso={0.08} className="font-mano text-[12.5cqw] leading-none text-azul-noche" />
         </Pos>
         <Pos x={72.3} y={50}>
-          <Escribir lineas={["8:30 PM"]} inicio={1.35} paso={0.04} className="font-mano text-[5.4cqw] text-azul-noche" />
+          <Escribir lineas={["2:00 PM"]} inicio={1.35} paso={0.04} className="font-mano text-[5.4cqw] text-azul-noche" />
         </Pos>
       </Pos>
 
@@ -434,12 +433,23 @@ export function Escena4() {
       <Pos x={50} y={78.1} w={100}>
         <div className="flex items-start justify-center gap-[2cqw] font-mano text-[4.8cqw] leading-[1.2]">
           <Escribir lineas={["LUGAR:"]} inicio={1.6} paso={0.03} className="text-cafe" />
-          <Escribir
-            lineas={["Salón de Eventos", "“Mundo Mágico”"]}
-            inicio={1.75}
-            paso={0.025}
-            className="text-center text-azul-noche"
-          />
+          <a
+            href={MAPA_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Ver el lugar en Google Maps: Cra. 88c #63-67, Salón comunal piso 3"
+            className="flex items-start gap-[1cqw] underline decoration-dorado decoration-1 underline-offset-[0.8cqw]"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="mt-[0.4cqw] h-[4.6cqw] w-[4.6cqw] shrink-0 fill-dorado">
+              <path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z" />
+            </svg>
+            <Escribir
+              lineas={["Cra. 88c #63-67", "Salón comunal piso 3"]}
+              inicio={1.75}
+              paso={0.025}
+              className="text-center text-azul-noche"
+            />
+          </a>
         </div>
       </Pos>
 
