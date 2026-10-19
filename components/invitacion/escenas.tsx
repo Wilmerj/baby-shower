@@ -411,7 +411,7 @@ export function Escena4() {
       </Pos>
 
       <Pos x={50} y={61.6}>
-        <Escribir lineas={["NOVIEMBRE"]} inicio={1.5} paso={0.04} className="font-mano text-[4.9cqw] tracking-[0.04em] text-cafe" />
+        <Escribir lineas={["NOVIEMBRE"]} inicio={1.5} paso={0.04} className="font-mano text-[5.4cqw] tracking-[0.1em] text-cafe" />
       </Pos>
 
       {/* Sección "Lugar": va separada del mes (más espacio que entre fecha y mes),
@@ -434,20 +434,16 @@ export function Escena4() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Ver el lugar en Google Maps: Conjunto Residencial Bosa Nueva Etapa 1, Cra. 88c #63-67, Salón comunal piso 3"
-            className="text-[4.7cqw] underline decoration-dorado decoration-1 underline-offset-[0.8cqw]"
+            className="flex flex-col items-center border-b-[0.35cqw] border-dorado pb-[1.4cqw]"
           >
-            {/* El nombre del conjunto es largo: va en una línea, más pequeño. */}
+            {/* Las tres líneas con el mismo tamaño, interlineado y color que el
+                párrafo de arriba (4.4cqw / 1.32); una sola línea dorada debajo
+                (un subrayado de texto se pintaría solo bajo los espacios). */}
             <Escribir
-              lineas={["Conjunto Residencial Bosa Nueva Etapa 1"]}
+              lineas={["Conjunto Residencial Bosa Nueva Etapa 1", "Cra. 88c #63-67", "Salón comunal piso 3"]}
               inicio={1.75}
               paso={0.02}
-              className="text-center text-[3.9cqw] text-azul-noche"
-            />
-            <Escribir
-              lineas={["Cra. 88c #63-67", "Salón comunal piso 3"]}
-              inicio={2.5}
-              paso={0.025}
-              className="text-center text-azul-noche"
+              className="text-center text-[4.4cqw] leading-[1.32] text-azul-noche"
             />
           </a>
         </div>
