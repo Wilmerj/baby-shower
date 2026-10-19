@@ -181,7 +181,9 @@ export function Escena1() {
         </Pos>
       ))}
 
-      <Pos x={44.4} y={26.95} w={35.2}>
+      {/* Bebé centrado en el anillo: el sprite está centrado en su imagen, así
+          que x/y coinciden con el centro del anillo (50 / 26.9). */}
+      <Pos x={50} y={26.9} w={30}>
         <Aparece retraso={1.3} desde={{ scale: 0.9 }}>
           <Flota duracion={4.5}>
             <Sprite src="/img/fetal.webp" alt="Goku bebé dormido" />
@@ -306,8 +308,8 @@ export function Escena3() {
         </Trazo>
       </Pos>
 
-      {/* Ecografía en círculo, centrada. El fondo del círculo es negro igual
-          que el de la imagen, así no se nota dónde termina la foto. */}
+      {/* Ecografía en círculo, centrada. El fondo del círculo tiene el mismo
+          tono oscuro que la imagen, así no se nota dónde termina la foto. */}
       <Pos x={50} y={77} w={50}>
         <motion.div
           initial={{ opacity: 0, scale: 0.86 }}
@@ -316,7 +318,7 @@ export function Escena3() {
             opacity: { delay: 0.8, duration: 1 },
             scale: { delay: 0.8, duration: 8, ease: "linear" },
           }}
-          className="relative aspect-square w-full overflow-hidden rounded-full border-[0.7cqw] border-dorado bg-black shadow-[0_1.5cqw_4cqw_rgba(0,0,0,0.35)]"
+          className="relative aspect-square w-full overflow-hidden rounded-full border-[0.7cqw] border-dorado bg-[#121212] shadow-[0_1.5cqw_4cqw_rgba(0,0,0,0.35)]"
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -335,7 +337,8 @@ export function Escena3() {
 export function Escena4() {
   return (
     <>
-      <Pos x={57} y={16.3} w={55}>
+      {/* Bebé en la nube un poco más abajo, con margen libre arriba. */}
+      <Pos x={57} y={20.5} w={55}>
         <motion.div
           initial={{ y: "-120%" }}
           animate={{ y: 0 }}
@@ -365,45 +368,26 @@ export function Escena4() {
 
       <EsferasEsquinas retraso={0.4} arriba />
 
-      <Pos x={50} y={37}>
-        <Trazo inicio={0.4} duracion={0.9} borrar className={`${SCRIPT} text-[12.5cqw]`}>
-          {BEBE}
-        </Trazo>
-      </Pos>
 
-      <Pos x={50} y={45.4} w={96}>
+      {/* Texto resumido: dice lo mismo (Diosito me está terminando, por eso mis
+          papás te invitan) en tres líneas en vez de cinco. */}
+      <Pos x={50} y={48} w={96}>
         <Escribir
           lineas={[
-            "Pronto estaré con ustedes pero ahorita Diosito",
-            "aún me está pintando mis ojitos, mis manitas y",
-            "mis piecitos, por ese motivo mis papás...",
+            "Diosito aún me está pintando mis ojitos,",
+            "mis manitas y mis piecitos, por eso mis papás",
+            "te invitan a compartir mi llegada.",
           ]}
           inicio={0.5}
-          paso={0.008}
-          className={`${MANO} text-[4.05cqw] leading-[1.32] text-cafe`}
-        />
-      </Pos>
-
-      <Pos x={50} y={53.6} w={100}>
-        <Escribir
-          lineas={[PAPAS]}
-          inicio={0.9}
-          paso={0.03}
-          className={`${MANO} text-[7cqw] leading-none text-azul-noche`}
-        />
-      </Pos>
-
-      <Pos x={50} y={59.3} w={96}>
-        <Escribir
-          lineas={["Tienen el gusto de invitarte a compartir", "con nosotros antes de mi llegada"]}
-          inicio={1}
           paso={0.012}
-          className={`${MANO} text-[4.05cqw] leading-[1.32] text-cafe`}
+          className={`${MANO} text-[4.4cqw] leading-[1.32] text-cafe`}
         />
       </Pos>
 
-      <Pos x={50} y={66.8} w={100} className="aspect-[100/7.8]">
-        {[16.3, 58.5].map((izquierda) =>
+      {/* Vertical en proporción áurea: el bloque de fecha va a 6.8 de las
+          frases y 4.2 del nombre del mes (6.8 / 4.2 ≈ φ); el lugar, otros 6.8 más abajo. */}
+      <Pos x={50} y={57.4} w={100} className="aspect-[100/7.8]">
+        {[13.87, 58.53].map((izquierda) =>
           ["0%", "100%"].map((arriba) => (
             <motion.span
               key={`${izquierda}-${arriba}`}
@@ -415,37 +399,53 @@ export function Escena4() {
             />
           )),
         )}
-        <Pos x={30.1} y={50}>
+        <Pos x={27.67} y={50}>
           <Escribir lineas={["DOMINGO"]} inicio={1.2} paso={0.04} className="font-mano text-[5.4cqw] text-azul-noche" />
         </Pos>
-        <Pos x={51.2} y={46}>
+        <Pos x={50} y={46}>
           <Escribir lineas={["29"]} inicio={1.3} paso={0.08} className="font-mano text-[12.5cqw] leading-none text-azul-noche" />
         </Pos>
-        <Pos x={72.3} y={50}>
+        <Pos x={72.33} y={50}>
           <Escribir lineas={["2:00 PM"]} inicio={1.35} paso={0.04} className="font-mano text-[5.4cqw] text-azul-noche" />
         </Pos>
       </Pos>
 
-      <Pos x={50} y={71.5}>
+      <Pos x={50} y={61.6}>
         <Escribir lineas={["NOVIEMBRE"]} inicio={1.5} paso={0.04} className="font-mano text-[4.9cqw] tracking-[0.04em] text-cafe" />
       </Pos>
 
-      <Pos x={50} y={78.1} w={100}>
-        <div className="flex items-start justify-center gap-[2cqw] font-mano text-[4.8cqw] leading-[1.2]">
-          <Escribir lineas={["LUGAR:"]} inicio={1.6} paso={0.03} className="text-cafe" />
+      {/* Sección "Lugar": va separada del mes (más espacio que entre fecha y mes),
+          con un título pequeño, espaciado y entre filetes dorados, y la
+          dirección debajo en grande. Toda la dirección enlaza al mapa. */}
+      <Pos x={50} y={72.6} w={100}>
+        <div className="flex flex-col items-center gap-[2.6cqw] font-mano leading-[1.2]">
+          <div className="flex items-center gap-[2.5cqw]">
+            <span aria-hidden className="h-[0.35cqw] w-[9cqw] bg-dorado" />
+            <Escribir
+              lineas={["LUGAR"]}
+              inicio={1.6}
+              paso={0.04}
+              className="pl-[0.35em] text-[3.8cqw] tracking-[0.35em] text-cafe"
+            />
+            <span aria-hidden className="h-[0.35cqw] w-[9cqw] bg-dorado" />
+          </div>
           <a
             href={MAPA_URL}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Ver el lugar en Google Maps: Cra. 88c #63-67, Salón comunal piso 3"
-            className="flex items-start gap-[1cqw] underline decoration-dorado decoration-1 underline-offset-[0.8cqw]"
+            aria-label="Ver el lugar en Google Maps: Conjunto Residencial Bosa Nueva Etapa 1, Cra. 88c #63-67, Salón comunal piso 3"
+            className="text-[4.7cqw] underline decoration-dorado decoration-1 underline-offset-[0.8cqw]"
           >
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="mt-[0.4cqw] h-[4.6cqw] w-[4.6cqw] shrink-0 fill-dorado">
-              <path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z" />
-            </svg>
+            {/* El nombre del conjunto es largo: va en una línea, más pequeño. */}
+            <Escribir
+              lineas={["Conjunto Residencial Bosa Nueva Etapa 1"]}
+              inicio={1.75}
+              paso={0.02}
+              className="text-center text-[3.9cqw] text-azul-noche"
+            />
             <Escribir
               lineas={["Cra. 88c #63-67", "Salón comunal piso 3"]}
-              inicio={1.75}
+              inicio={2.5}
               paso={0.025}
               className="text-center text-azul-noche"
             />
@@ -540,7 +540,9 @@ export function Escena5({ regalo, confirmacion = "pendiente", confirmar }: Props
         );
       })}
 
-      <Pos x={49.4} y={43.1 + dy} w={59.9}>
+      {/* Goku en el centro exacto del anillo (centroY) y lo bastante chico para
+          que sus pies no toquen la esfera de abajo. */}
+      <Pos x={50} y={centroY} w={46}>
         <Aparece retraso={0.9} duracion={0.9} desde={{ scale: 0.94 }}>
           <Flota duracion={4}>
             <Sprite src="/img/goku.webp" alt="Goku bebé tomando tetero" />

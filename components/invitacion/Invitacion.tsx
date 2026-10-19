@@ -13,6 +13,7 @@ import {
 import { useEffect, useEffectEvent, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 import { DURACION, escenaEn, esPlural } from "@/lib/invitacion";
 import { BandaNubes, Destellos, Esfera, Sprite } from "./dibujos";
+import { BarraProgreso } from "./BarraProgreso";
 import { ESCENAS_COMPONENTES, type EstadoConfirmacion } from "./escenas";
 import { confirmarAsistencia, consultarConfirmacion } from "@/app/confirmar";
 
@@ -92,6 +93,10 @@ export function Invitacion({ enlace, invitado, regalo }: Props) {
   }
   // Cuenta regresiva de la portada, de 0 a 1.
   const espera = useMotionValue(0);
+  // Segundo actual del video; alimenta la barra sin re-renderizar por cuadro.
+  const tiempo = useMotionValue(0);
+  // Mientras se arrastra la barra, el bucle no pisa la vista previa.
+  const arrastrando = useRef(false);
 
   useEffect(() => {
     for (const nombre of IMAGENES) new Image().src = `/img/${nombre}.webp`;
@@ -146,7 +151,7 @@ export function Invitacion({ enlace, invitado, regalo }: Props) {
     if (!abierta) return;
     let cuadro = 0;
     const avanzar = () => {
-      if (pausa.current) {
+      if (pausa.current || arrastrando.current) {
         cuadro = requestAnimationFrame(avanzar);
         return;
       }
@@ -163,19 +168,21 @@ export function Invitacion({ enlace, invitado, regalo }: Props) {
       // la espera ahí en vez de retroceder.
       const t =
         reloj.current.conAudio && pista ? Math.max(pista.currentTime, desde) : (performance.now() - inicio) / 1000;
+      tiempo.set(Math.min(t, DURACION));
       setEscena(escenaEn(t));
       if (t >= DURACION - 0.05 || audio.current?.ended) setTerminada(true);
       else cuadro = requestAnimationFrame(avanzar);
     };
     cuadro = requestAnimationFrame(avanzar);
     return () => cancelAnimationFrame(cuadro);
-  }, [abierta, vuelta]);
+  }, [abierta, vuelta, tiempo]);
 
   function reproducir() {
     // ?t=22 en la URL arranca desde ese segundo; sirve para revisar una escena.
     const desde = Number(new URLSearchParams(location.search).get("t")) || 0;
     sonarDesde(desde);
     setTerminada(false);
+    tiempo.set(desde);
     setEscena(-1);
     setVuelta((v) => v + 1);
     setAbierta(true);
@@ -207,6 +214,26 @@ export function Invitacion({ enlace, invitado, regalo }: Props) {
   // animación y el reloj vuelve a seguirla.
   function encenderMusica() {
     sonarDesde((performance.now() - reloj.current.inicio) / 1000);
+  }
+
+  // Salto desde la barra. Al arrastrar solo se ve la vista previa (thumb y
+  // escena); al soltar se mueve el audio y se remonta la escena para que
+  // anime desde su inicio. Un salto cancela la pausa sin reanudar lo viejo.
+  function buscar(t: number, { final }: { final: boolean }) {
+    tiempo.set(t);
+    setEscena(escenaEn(t));
+    setTerminada(false);
+    if (!final) {
+      arrastrando.current = true;
+      return;
+    }
+    arrastrando.current = false;
+    if (pausa.current) {
+      pausa.current = null;
+      setPausada(false);
+    }
+    sonarDesde(t);
+    setVuelta((v) => v + 1);
   }
 
   const pedirSonido = sinMusica && !terminada;
@@ -257,7 +284,7 @@ export function Invitacion({ enlace, invitado, regalo }: Props) {
   // Tocar la pantalla mientras corre la invitación la pausa o la reanuda. Si
   // arrancó sin música, el primer toque la enciende.
   function alTocarPantalla(e: MouseEvent) {
-    if (!abierta || terminada || (e.target as Element).closest("button, a")) return;
+    if (!abierta || terminada || (e.target as Element).closest("button, a, [data-barra]")) return;
     if (pausa.current) continuar();
     else if (pedirSonido) encenderMusica();
     else pausar();
@@ -302,6 +329,8 @@ export function Invitacion({ enlace, invitado, regalo }: Props) {
           )}
         </AnimatePresence>
       </div>
+
+      {abierta && <BarraProgreso tiempo={tiempo} duracion={DURACION} alBuscar={buscar} />}
 
       {abierta && (
         <div className="absolute top-[max(env(safe-area-inset-top),12px)] right-3 flex gap-2">
