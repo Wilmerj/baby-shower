@@ -31,7 +31,7 @@ export const GRUPOS_INVITADOS: { grupo: string; invitados: { nombre: string; enl
       { nombre: "Marlen Garzón y esposo", enlace: "tia-marlen", regalo: "Mamelucos + Pañales etapa 3 o superior" },
       { nombre: "Leo mejia y acompañante", enlace: "leo-y-novia", regalo: "Regalo + Pañales etapa 3 o superior" },
       { nombre: "Geiner mejia, esposa e hijos", enlace: "geiner", regalo: "Juguetes interactivos + Pañitos humedos" },
-      { nombre: "Blanca Garzón", enlace: "tia-blanca", regalo: "Regalo + Pañales etapa 3 o superior" },
+      { nombre: "Blanca Castillo", enlace: "tia-blanca", regalo: "Regalo + Pañales etapa 3 o superior" },
       { nombre: "Juan Garcia y Esposa", enlace: "juan-carlos-garcia", regalo: "Regalo + Pañales etapa 2 o superior" },
       { nombre: "Edward Garcia, Esposa e hija", enlace: "edward", regalo: "Regalo + Pañales etapa 2 o superior" },
       { nombre: "Jani Garcia, esposo e hijo", enlace: "jani", regalo: "Regalo + Pañales etapa 3 o superior" },
