@@ -96,12 +96,13 @@ export const GRUPOS_INVITADOS: { grupo: string; invitados: { nombre: string; enl
       { nombre: "Viviana Romero, esposo e hijo", enlace: "viviana-romero", regalo: "Semanario + Pañitos humedos" },
       { nombre: "Michael Paredes", enlace: "michael-paredes", regalo: "Regalo + Pañales etapa 3 o superior" },
       { nombre: "Jhon Castaño", enlace: "jhon-castano", regalo: "Regalo + Pañales etapa 3 o superior" },
+      { nombre: "Diana Gaitan", enlace: "diana-gaitan", regalo: "Regalo + Pañales etapa 3 o superior" },
     ],
   },
   {
     grupo: "Lista 5",
     invitados: [
-      { nombre: "Nidia Cabezas", enlace: "nidia-cabezas", regalo: "Regalo especial + Pañales etapa 3 o superior" },
+      { nombre: "Nirria maria", enlace: "nidia-cabezas", regalo: "Silla mesedora" },
       { nombre: "Wilmer Garzon y Acompañante", enlace: "wilmer-garzon", regalo: "Comedor bebe + Pañales etapa 3 o superior" },
       { nombre: "David Garzon", enlace: "david-garzon", regalo: "Caminador + Pañales etapa 3 o superior" },
       { nombre: "Kevin Garzon y Acompañante", enlace: "kevin-garzon", regalo: "Set de platos y cubiertos de silicona + Pañales etapa 3 o superior" },
