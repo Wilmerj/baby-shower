@@ -20,6 +20,10 @@ const formatoFecha = new Intl.DateTimeFormat("es-CO", {
   minute: "2-digit",
 });
 
+// Texto que va antes del enlace al copiarlo, listo para pegar en WhatsApp.
+const MENSAJE_INVITACION =
+  "¡Hola! Esperamos que te encuentres de maravilla. Nos hace muy felices invitarte a nuestro baby shower. Por favor, revisa la información en la tarjeta y confirma tu asistencia en el mismo espacio. ¡Te esperamos con mucho cariño!";
+
 const sinTildes = (texto: string) =>
   texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
@@ -72,7 +76,7 @@ export function ListaInvitados({
   );
 
   async function copiar(enlace: string) {
-    await navigator.clipboard.writeText(`${location.origin}/${enlace}`);
+    await navigator.clipboard.writeText(`${MENSAJE_INVITACION}\n\n${location.origin}/${enlace}`);
     setCopiado(enlace);
     setTimeout(() => setCopiado((actual) => (actual === enlace ? null : actual)), 1500);
   }
