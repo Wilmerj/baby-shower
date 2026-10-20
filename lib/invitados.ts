@@ -55,7 +55,6 @@ export const GRUPOS_INVITADOS: { grupo: string; invitados: { nombre: string; enl
       { nombre: "Cantor", enlace: "cantor", regalo: "Conjunto 3 piezas talla 3-6 meses + 1 paca de pañales superior a etapa 3" },
       { nombre: "Juan DC", enlace: "juan-dc", regalo: "Móvil musical para cuna + 1 paca de pañales superior a etapa 3" },
       { nombre: "Mus", enlace: "mus", regalo: "Set de sonajeros y mordedores + 1 paca de pañales superior a etapa 3" },
-      { nombre: "Sampol y Keily", enlace: "sampol-y-keily", regalo: "Set de teteros anticólicos 9 oz + 1 paca de pañales superior a etapa 3" },
       { nombre: "Estefany", enlace: "estefany", regalo: "Kit de baño y cremas + 1 paca de pañales superior a etapa 3" },
       { nombre: "Jhenner y Nicol", enlace: "jhenner-y-nicol", regalo: "4 pijamas enteras talla 9-12 meses + 1 paca de pañales superior a etapa 3" },
       { nombre: "Malonso", enlace: "malonso", regalo: "Conjunto 3 piezas talla 6-9 meses + 1 paca de pañales superior a etapa 3" },
