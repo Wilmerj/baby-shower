@@ -34,7 +34,7 @@ export const GRUPOS_INVITADOS: { grupo: string; invitados: { nombre: string; enl
       { nombre: "Blanca Castillo", enlace: "tia-blanca", regalo: "Regalo + Pañales etapa 3 o superior" },
       { nombre: "Juan Garcia y Esposa", enlace: "juan-carlos-garcia", regalo: "Regalo + Pañales etapa 2 o superior" },
       // { nombre: "Edward Garcia, Esposa e hija", enlace: "edward", regalo: "Regalo + Pañales etapa 2 o superior" },
-      // { nombre: "Jani Garcia, esposo e hijo", enlace: "jani", regalo: "Regalo + Pañales etapa 3 o superior" },
+      { nombre: "Jani Garcia, esposo e hijo", enlace: "jani", regalo: "Regalo + Pañales etapa 3 o superior" },
       // { nombre: "Dana Garcia, esposo e hijo", enlace: "dana", regalo: "Regalo + Pañales etapa 3 o superior" },
       { nombre: "Eduardo Garcia y Esposa", enlace: "eduardo-garcia", regalo: "Cobija suave + Pañales etapa 3 o superior" },
       { nombre: "Natalia Garcia y Marido", enlace: "natilia", regalo: "Regalo + Pañales etapa 3 o superior" },
