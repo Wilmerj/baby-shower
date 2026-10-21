@@ -97,6 +97,7 @@ export const GRUPOS_INVITADOS: { grupo: string; invitados: { nombre: string; enl
       { nombre: "Michael Paredes", enlace: "michael-paredes", regalo: "Regalo + Pañales etapa 3 o superior" },
       { nombre: "Jhon Castaño", enlace: "jhon-castano", regalo: "Regalo + Pañales etapa 3 o superior" },
       { nombre: "Diana Gaitan", enlace: "diana-gaitan", regalo: "Regalo + Pañales etapa 3 o superior" },
+      { nombre: "Alejandro huertas, Esposa e hijo", enlace: "alejandro-huertas", regalo: "Regalo + Pañales etapa 3 o superior" },
     ],
   },
   {
