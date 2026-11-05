@@ -54,7 +54,6 @@ export const GRUPOS_INVITADOS: { grupo: string; invitados: { nombre: string; enl
       { nombre: "Mus", enlace: "mus", regalo: "Cambiador portatil (Pañalera) + Pañitos humedos" },
       { nombre: "Estefany", enlace: "estefany", regalo: "Set de biberones + Pañales etapa 3 o superior" },
       { nombre: "Jhenner y Nicole", enlace: "jhenner-y-nicol", regalo: "Libros interactivos + Pañales etapa 3 o superior" },
-      { nombre: "Malonso", enlace: "malonso", regalo: "Tina de baño + Pañales etapa 3 o superior" },
       { nombre: "Gotza", enlace: "gotza", regalo: "Regalo + Pañales etapa 3 o superior" },
       { nombre: "Yeik", enlace: "yeik", regalo: "Regalo + Pañales etapa 3 o superior" },
       { nombre: "Don Camilo y Esposa", enlace: "don-camilo", regalo: "Regalo + Pañales etapa 3 o superior" },
