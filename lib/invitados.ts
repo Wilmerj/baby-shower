@@ -64,6 +64,7 @@ export const GRUPOS_INVITADOS: { grupo: string; invitados: { nombre: string; enl
       { nombre: "Edu Piña", enlace: "edu-pina", regalo: "Maquina de ruido blanco + Pañitos" },
       { nombre: "Gollum, Esposa e Hijo", enlace: "gollum", regalo: "Fular + Pañales etapa 3 o superior" },
       { nombre: "Dani Black", enlace: "dani-black", regalo: "Regalo + Pañales etapa 3 o superior" },
+      { nombre: "Sua Huayra", enlace: "sua-huayra", regalo: "Gift + Pañales etapa 3 o superior" },
     ],
   },
   {
