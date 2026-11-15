@@ -41,6 +41,7 @@ export const GRUPOS_INVITADOS: { grupo: string; invitados: { nombre: string; enl
       { nombre: "Yolanda Garzón y esposo", enlace: "tia-yolanda", regalo: "Cobija térmica + Pañales etapa 3 o superior" },
       { nombre: "Sebastian Mejia y acompañante", enlace: "sebastian-y-novia", regalo: "Regalo + Pañales etapa 3 o superior" },
       { nombre: "Leidy Mejia y novia", enlace: "leidy", regalo: "Regalo + Pañales etapa 3 o superior" },
+      { nombre: "Viviana Ortiz, Esposo e hijo", enlace: "vivi", regalo: "Regalo + Pañales etapa 3 o superior" },
     ],
   },
   {
